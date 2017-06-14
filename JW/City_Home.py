@@ -20,6 +20,7 @@ def get_WebPage(url):
 #将得到的数据变更成适合存入数据库的样式
 def Forma_change():
 #匹配所有jiwu.com结尾的网址，数据来源 上一个函数，非贪婪模式
+
     city_list = re.findall('http://\w*.\w*.\w*.\w*[^a-zA-Z0-9]',get_WebPage(url))
 #数据去重
     city_list = list(set(city_list))
