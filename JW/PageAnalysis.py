@@ -1,45 +1,76 @@
 #-*- coding: UTF-8 -*-
 #示例代码，分析每个网页的服务器头文件，访问时间，访问状态等
 
-import urllib.request,urllib.robotparser
+import urllib.request
 import pycurl
-import sys
-import os
 
 
-url = "http://cs.jiwu.com"
+# with urllib.request.urlopen("https://cs.jiwu.com") as f:
+#     data = f.read()
+#     print('Status:', f.status, f.reason)
+#     for k, v in f.getheaders():
+#         print('%s: %s' % (k, v))
+#     print('Data:', data.decode('utf-8'))
+#
+# url = "http://cs.jiwu.com"
+# page = urllib.request.urlopen(url)
+#
+# print(page.status)
+# print(page.getheaders)
+# print("aaa:",(page.read().decode('utf8')))
+#
+# a = pycurl.CONNECT_TIME
 
+# # http_conn_time =  c.getinfo(pycurl.CONNECT_TIME)
+# c = pycurl.Curl().getinfo(pycurl.URL, "http://cs.jiwu.com")
+#
+#
+# c.setopt(pycurl.ENCODING, 'gzip')
+#
+# c.setopt(pycurl.URL, "http://cs.jiwu.com")
+#
+#
+# http_conn_time = c.getinfo(pycurl.CONNECT_TIME)
+#
+# print(http_conn_time)
 
-class Test:
-    def __init__(self):
-        self.contents = ''
+#
+#
+# c = pycurl.Curl()
+# c.setopt(pycurl.URL, "http://cs.jiwu.com")
+# c.setopt(pycurl.FOLLOWLOCATION, 1)
+# # c.perform()
+# print("connect",c.getinfo(pycurl.CONNECT_TIME),"url=",c.getinfo(pycurl.CURL_HTTP_VERSION_NONE))
 
-    def body_callback(self, buf):
-        self.contents = self.contents + buf
+# coding:utf-8
+import unittest
+import HTMLTestRunner
 
+def all_case():
+    # 待执行用例的目录
+    case_dir = "D:\\test\\yoyotest\\case"
+    testcase = unittest.TestSuite()
+    discover = unittest.defaultTestLoader.discover(case_dir,
+                                                   pattern="test*.py",
+                                                   top_level_dir=None)
+    # discover方法筛选出来的用例，循环添加到测试套件中
+    for test_suite in discover:
+        for test_case in test_suite:
+            # 添加用例到testcase
+            testcase.addTests(test_case)
+    print(testcase)
+    return testcase
 
-def test_gzip(input_url):
-    t = Test()
-    # gzip_test = file("gzip_test.txt", 'w')
-    c = pycurl.Curl()
-    c.setopt(pycurl.WRITEFUNCTION, t.body_callback)
-    c.setopt(pycurl.ENCODING, 'gzip')
-    c.setopt(pycurl.URL, input_url)
-    c.perform()
-    http_code = c.getinfo(pycurl.HTTP_CODE)
-    http_conn_time = c.getinfo(pycurl.CONNECT_TIME)
-    http_pre_tran = c.getinfo(pycurl.PRETRANSFER_TIME)
-    http_start_tran = c.getinfo(pycurl.STARTTRANSFER_TIME)
-    http_total_time = c.getinfo(pycurl.TOTAL_TIME)
-    http_size = c.getinfo(pycurl.SIZE_DOWNLOAD)
-    print
-    'http_code http_size conn_time pre_tran start_tran total_time'
-    print
-    "%d %d %f %f %f %f" % (http_code, http_size, http_conn_time, http_pre_tran, http_start_tran, http_total_time)
+if __name__ == "__main__":
+    # 返回实例
+    # runner = unittest.TextTestRunner()
+    report_path = "D:\\test\\yoyotest\\report\\result.html"
 
+    fp = open(report_path, "wb")
+    runner = HTMLTestRunner.HTMLTestRunner(stream=fp,
+                                           title=u'这是我的自动化测试报告',
+                                           description=u'用例执行情况：')
 
-if __name__ == '__main__':
-
-    input_url = url
-
-    test_gzip(input_url)
+    # run所有用例  交流QQ群：232607095
+    runner.run(all_case())
+    fp.close()

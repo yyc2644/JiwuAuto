@@ -9,27 +9,50 @@ import re
 
 #未来改进的时候，多进程可能会用到Queue
 
-
-url = "http://cs.jiwu.com"
-# 输出网址，输出网址
-def get_WebPage(url):
-    WebPageUrl = urllib.request.urlopen(url)
-    WebPage = WebPageUrl.read().decode("utf8")
-    WebPageUrl.close()
-    return WebPage
+'''
+废弃代码
+'''
+# def get_WebPage(url):
+#     WebPageUrl = urllib.request.urlopen(url)
+#     WebPage = WebPageUrl.read().decode("utf8")
+#     WebPageUrl.close()
+#     return WebPage
 #将得到的数据变更成适合存入数据库的样式
-def Forma_change():
-#匹配所有jiwu.com结尾的网址，数据来源 上一个函数，非贪婪模式
+# def Forma_change():
+# #匹配所有jiwu.com结尾的网址，数据来源 上一个函数，非贪婪模式
+#
+#     city_list = re.findall('http://\w*.\w*.\w*.\w*',get_WebPage(url))
+# #数据去重
+#     city_list = list(set(city_list))
+#
+#     return city_list
 
-    city_list = re.findall('http://\w*.\w*.\w*.\w*[^a-zA-Z0-9]',get_WebPage(url))
-#数据去重
-    city_list = list(set(city_list))
+from selenium import webdriver
 
-    return city_list
+# driver = webdriver.Chrome("/Applications/chromedriver")
+# driver.get("http://cs.jiwu.com")
+# page = driver.page_source
+# print page
 
+#打开网页
+url = "http://cs.jiwu.com"
+
+WebPageUrl = urllib.request.urlopen(url)
+
+WebPage = WebPageUrl.read().decode("utf8")
+
+#获取链接
+url_list = re.findall('href=\"(.*?)\"', WebPage, re.S)
+
+url_all = []
+
+for url in url_list:
+    if "http" in url:
+        print(url)
+        url_all.append(url)
 
 
 if __name__ == "__main__":
 
-    print(Forma_change())
+    print(url_all)
 
