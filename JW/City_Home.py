@@ -44,6 +44,7 @@ WebPage = WebPageUrl.read().decode("utf8")
 #获取链接
 url_list = re.findall('href=\"(.*?)\"', WebPage, re.S)
 
+print(url_list)
 url_all = []
 
 for url in url_list:
@@ -54,5 +55,5 @@ for url in url_list:
 
 if __name__ == "__main__":
 
-    print(url_all)
+    print("-------",url_all,"--------------",url_list)
 

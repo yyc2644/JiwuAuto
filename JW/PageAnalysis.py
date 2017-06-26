@@ -1,76 +1,48 @@
 #-*- coding: UTF-8 -*-
-#示例代码，分析每个网页的服务器头文件，访问时间，访问状态等
+# coding: UTF-8
 
-import urllib.request
+from io import StringIO
 import pycurl
+import sys
+import os
+import json
 
+# class Http_Test:
+#     def __init__(self):
+#         self.contents = ""
+#     def body_callback(self,buf):
+#         self.contents = self.contents + buf(str)
 
-# with urllib.request.urlopen("https://cs.jiwu.com") as f:
-#     data = f.read()
-#     print('Status:', f.status, f.reason)
-#     for k, v in f.getheaders():
-#         print('%s: %s' % (k, v))
-#     print('Data:', data.decode('utf-8'))
-#
-# url = "http://cs.jiwu.com"
-# page = urllib.request.urlopen(url)
-#
-# print(page.status)
-# print(page.getheaders)
-# print("aaa:",(page.read().decode('utf8')))
-#
-# a = pycurl.CONNECT_TIME
+# def Check_Url(input_url):
+#     pass
+#     return
 
-# # http_conn_time =  c.getinfo(pycurl.CONNECT_TIME)
-# c = pycurl.Curl().getinfo(pycurl.URL, "http://cs.jiwu.com")
-#
-#
-# c.setopt(pycurl.ENCODING, 'gzip')
-#
-# c.setopt(pycurl.URL, "http://cs.jiwu.com")
-#
-#
-# http_conn_time = c.getinfo(pycurl.CONNECT_TIME)
-#
-# print(http_conn_time)
+input_url = "http://cs.jiwu.com"
 
-#
-#
-# c = pycurl.Curl()
-# c.setopt(pycurl.URL, "http://cs.jiwu.com")
-# c.setopt(pycurl.FOLLOWLOCATION, 1)
-# # c.perform()
-# print("connect",c.getinfo(pycurl.CONNECT_TIME),"url=",c.getinfo(pycurl.CURL_HTTP_VERSION_NONE))
-
-# coding:utf-8
-import unittest
-import HTMLTestRunner
-
-def all_case():
-    # 待执行用例的目录
-    case_dir = "D:\\test\\yoyotest\\case"
-    testcase = unittest.TestSuite()
-    discover = unittest.defaultTestLoader.discover(case_dir,
-                                                   pattern="test*.py",
-                                                   top_level_dir=None)
-    # discover方法筛选出来的用例，循环添加到测试套件中
-    for test_suite in discover:
-        for test_case in test_suite:
-            # 添加用例到testcase
-            testcase.addTests(test_case)
-    print(testcase)
-    return testcase
-
-if __name__ == "__main__":
-    # 返回实例
-    # runner = unittest.TextTestRunner()
-    report_path = "D:\\test\\yoyotest\\report\\result.html"
-
-    fp = open(report_path, "wb")
-    runner = HTMLTestRunner.HTMLTestRunner(stream=fp,
-                                           title=u'这是我的自动化测试报告',
-                                           description=u'用例执行情况：')
-
-    # run所有用例  交流QQ群：232607095
-    runner.run(all_case())
-    fp.close()
+c = pycurl.Curl()
+c.setopt(pycurl.ENCODING, 'gzip')
+c.setopt(pycurl.URL,input_url)
+# c.perform()
+http_code = c.getinfo(pycurl.HTTP_CODE)
+http_conn_time = c.getinfo(pycurl.CONNECT_TIME)
+http_pre_tran = c.getinfo(pycurl.PRETRANSFER_TIME)
+http_start_tran = c.getinfo(pycurl.STARTTRANSFER_TIME)
+http_total_time = c.getinfo(pycurl.TOTAL_TIME)
+http_size = c.getinfo(pycurl.SIZE_DOWNLOAD)
+http_namelookup_time = c.getinfo(pycurl.NAMELOOKUP_TIME)
+http_connectcode = c.getinfo(pycurl.HTTP_CONNECTCODE)
+info = """
+        监测URL：%s
+        响应代码: %s
+        连接代码: %s
+        连接时间: %.3f秒
+        域名解析时间: %.3f秒
+        请求总的时间: %.3f秒
+        连接上后到开始传输时间: %.3f秒
+        接收到第一个字节的时间: %.3f秒
+        """%(input_url,http_code,http_connectcode,http_conn_time,http_namelookup_time,http_total_time,http_pre_tran,http_start_tran)
+print(info)
+# if __name__ == "__main__":
+#     input_url = "cs.jiwu.com"
+#     info = Check_Url(input_url)
+#     print(info)

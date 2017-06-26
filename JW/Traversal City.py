@@ -21,7 +21,6 @@ def Forma_change():
     city_list = re.findall('http://[^\s]*jiwu.com',get_WebPage(url),re.S)
 #数据去重
     city_list = list(set(city_list))
-
     print(city_list)
 
     return city_list
