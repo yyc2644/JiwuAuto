@@ -7,6 +7,9 @@ import pycurl
 import sys
 import os
 import json
+import urllib.request
+from bs4 import BeautifulSoup
+import re
 
 class Http_Test():
     #直接拷贝别人家的代码，不知道这个类有什么用
@@ -15,8 +18,6 @@ class Http_Test():
     def body_callback(self,buf):
         # self.contents = self.contents + buf
         pass
-
-
 
 
 def Check_Url(input_url):
@@ -53,7 +54,22 @@ def Check_Url(input_url):
            )
     return info
 
+def get_url():
+    url = "http://cs.jiwu.com"
+    data=urllib.request.urlopen(url).read()
+    page_data=data.decode("utf8")
+    soup = BeautifulSoup(page_data, "html.parser")
+
+    for link in soup.find_all('a'):
+        input_url = link.get('href')
+        info = Check_Url(input_url)
+        print(info)
+    # city_list = list(set(link.get('href')))
+
+
+    return link
+
 if __name__ == "__main__":
-    input_url = "http://cs.jiwu.com"
+    input_url = "http://www.jiwu.com/zhuanti/4016/"
     info = Check_Url(input_url)
     print(info)
